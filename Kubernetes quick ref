@@ -1,0 +1,68 @@
+Definitions:
+Pods- are unit, a single program. 
+Nodes- physical or virtual machine running 1 or more pods
+Deployments- deployments of pods. Can scale. 1 or more pods
+Service- a loose coupling of some exposed endpoint to a bunch of pods (via a deployment)
+
+https://kubernetes.io/docs/reference/kubectl/docker-cli-to-kubectl/
+
+Commands:
+minikube start
+kubectl get pods
+kubectl get services
+kubectl get replicasets
+kubectl get deployment
+kubectl describe pods
+kubectl describe service
+kubectl describe replicasets
+kubectl describe deployment
+//get label values. Labels are key value pairs
+kubectl get pods -l run=kubernetes-bootcamp
+kubectl get services -l run=kubernetes-bootcamp
+//set label and check
+kubectl label pod $POD_NAME app=v1
+kubectl describe pod $POD_NAME
+
+//describe a service
+kubectl get services
+kubectl describe services/kubernetes-bootcamp
+
+//expose a new service
+kubectl expose deployment/kubernetes-bootcamp --type="NodePort" --port 8080
+
+//test exposed port
+curl $(minikube ip):$NODE_PORT
+
+//delete a service
+kubectl delete service $SERVICE_NAME
+kubectl delete service -l run=kubernetes-bootcamp 
+
+//scale a deployment
+kubectl scale deployments/kubernetes-bootcamp --replicas=4
+
+//update a deployment
+kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2
+
+//view update progress
+kubectl describe deployments
+kubectl rollout status deployments/kubernetes-bootcamp
+
+//rollback an update
+kubectl rollout undo deployments/kubernetes-bootcamp
+
+//To get bash in a container 
+kubectl proxy
+//put pod name in env varible
+export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+kubectl exec -it $POD_NAME bash
+
+//get service port
+export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')
+echo NODE_PORT=$NODE_PORT
+
+//see env variables
+kubectl exec $POD_NAME env
+
+//For config maps
+
+
