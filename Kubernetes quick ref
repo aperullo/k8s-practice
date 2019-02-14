@@ -63,11 +63,25 @@ echo NODE_PORT=$NODE_PORT
 //see env variables
 kubectl exec $POD_NAME env
 
-//For config maps
-
 //For using local images
 eval $(minikube docker-env)
-docker build .
+docker build -t imagename:latest .
+docker images //should have image in it with a bunch of minikube stuff
+docker run -p 5000:5000 imagename:latest  //-d for backgrounded
 
+//Create secret from txt file.
+kubectl create secret generic user-pass --from-file=./secrets_files/username.txt --from-file=./secrets_files/password.txt
 
+//Create secret from yaml file. See secret_file.yaml for syntax. Secret must be encoded in base64
+kubectl create -f secret_file.yaml
+
+//To decode secret
+kubectl get secrets -o yaml
+//take value from data section
+echo "BASE64SECRET" | base64 --decode
+
+//To use venv. In folder
+python3 -m venv venv
+. venv/bin/activate
+pip install Flask
 

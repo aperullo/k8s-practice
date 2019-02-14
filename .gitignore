@@ -1,3 +1,5 @@
 configMaps/env_app/venv/*
 configMaps/env_app/__pycache__/*
+secrets/app_src/venv/*
+secrets/app_src/__pycache__/*
 docker-ddf/*
