@@ -65,4 +65,9 @@ kubectl exec $POD_NAME env
 
 //For config maps
 
+//For using local images
+eval $(minikube docker-env)
+docker build .
+
+
 
