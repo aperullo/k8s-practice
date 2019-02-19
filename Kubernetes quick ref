@@ -85,3 +85,11 @@ python3 -m venv venv
 . venv/bin/activate
 pip install Flask
 
+//update a running deployment
+kubectl set image deployments.apps/depl-name depl-name=image-name:version
+
+//see deployment status
+kubectl rollout status deployment depl-name
+
+//undo deployment update
+kubectl rollout undo depl-name

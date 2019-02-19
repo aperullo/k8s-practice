@@ -2,4 +2,12 @@ configMaps/env_app/venv/*
 configMaps/env_app/__pycache__/*
 secrets/app_src/venv/*
 secrets/app_src/__pycache__/*
+scaling/app_src/venv/*
+scaling/app_src/__pycache__/*
+dictionary/target/*
+dictionary/app_src/venv/*
+dictionary/app_src/__pycache__/*
+dictionary/app_src/dict_db/__pycache__/*
+dictionary/app_src/dict_queryer/__pycache__/*
 docker-ddf/*
+

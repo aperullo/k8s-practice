@@ -1,0 +1,133 @@
+#config map containing the secrets for the backend database
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: app-dict-c
+    namespace: default
+    labels:
+        app: app-dict
+data:
+    secret.dir: "${SECRET_DIR}" #"/etc/secret_dir"
+    dict.loc: "${DICT_LOC}" #"/dict_data/dictionary.json"
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+    name: app-dict-secret
+    labels:
+        app: app-dict
+type: Opaque
+data:
+    username: "dXNlcm5hbWV2YWx1ZQ=="
+    password: "cGFzc3dvcmR2YWx1ZQ=="
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+    name: app-dict-queryer-s
+    labels:
+        app: app-dict
+spec:
+    type: NodePort
+    selector:
+        app: app-dict
+        tier: app-dict-queryer
+    ports:
+      - protocol: TCP
+        port: 5000
+        nodePort: 31100
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+    name: app-dict-db-s
+    labels:
+        app: app-dict
+spec:
+    selector:
+        app: app-dict
+        tier: app-dict-db
+    ports:
+      - protocol: TCP
+        port: 5000        
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-dict-db-d
+    labels:
+        app: app-dict
+        tier: app-dict-db
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: app-dict
+    minReadySeconds: 3
+    template:
+        metadata:
+            labels:
+                app: app-dict
+                tier: app-dict-db
+        spec:
+            containers:
+              - name: app-dict-db
+                image: ${DB_IMAGE_NAME}
+                imagePullPolicy: Never
+                ports:
+                  - containerPort: 5000
+                volumeMounts:
+                  - name: secrets
+                    mountPath: "${SECRET_DIR}" # tell it where to put the secret volume
+                env:
+                  - name: SECRET_DIR # tells the flask app where the secret volume is
+                    valueFrom:
+                        configMapKeyRef:
+                            name: app-dict-c
+                            key: secret.dir
+                  - name: DICT_LOC # tells the flask app where to find the dict
+                    valueFrom:
+                        configMapKeyRef:
+                            name: app-dict-c
+                            key: dict.loc          
+            volumes:
+              - name: secrets
+                secret:
+                    secretName: app-dict-secret
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-dict-queryer-d
+    labels:
+        app: app-dict
+        tier: app-dict-queryer
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: app-dict
+    minReadySeconds: 3
+    template:
+        metadata:
+            labels:
+                app: app-dict
+                tier: app-dict-queryer
+        spec:
+            containers:
+              - name: app-dict-queryer
+                image: ${QUERYER_IMAGE_NAME}
+                imagePullPolicy: Never
+                ports:
+                  - containerPort: 5000
+                env:
+                  - name: "DB_SERVICE_NAME"
+                    value: "${DB_SERVICE_NAME}" #APP_DICT_DB_S_SERVICE_HOST"
+                  - name: "DB_SERVICE_PORT"
+                    value: "${DB_SERVICE_PORT}" #APP_DICT_DB_S_SERVICE_PORT"
+

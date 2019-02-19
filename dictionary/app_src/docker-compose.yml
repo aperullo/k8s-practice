@@ -1,0 +1,12 @@
+version: "3"
+services:
+    db:
+        image: dict-db
+        ports:
+          - "5000"
+    queryer:
+        image: dict-queryer
+        ports:
+          - "5001:5000"
+        environment:
+          - DB_URL=db:5000

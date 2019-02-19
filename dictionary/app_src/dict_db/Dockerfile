@@ -1,0 +1,34 @@
+from python:3.6-alpine as base
+from base as builder
+
+#Get dependencies
+COPY ./requirements.txt /
+RUN pip install --install-option="--prefix=/install" -r /requirements.txt
+
+# Set python path to include dependencies and src code
+ENV PYTHONPATH=/src:/install/lib/python3.6/site-packages:$PYTHONPATH
+
+COPY dict_db.py /src/app.py
+RUN dos2unix /src/*
+RUN chmod 755 /src/*.py
+COPY dict_data/dictionary.json /src/dict_data/dictionary.json
+
+FROM base
+
+COPY --from=builder /install /usr/local
+COPY --from=builder /src/app.py /app/
+COPY --from=builder /src/dict_data/dictionary.json /dict_data/dictionary.json
+RUN ln -s /app/app.py /usr/local/bin/app.py
+RUN chmod 755 /usr/local/bin/app.py
+
+#tell flask what to run and where to get dictionary
+RUN export FLASK_APP=/usr/local/bin/app.py
+
+#expose flask's default port
+EXPOSE 5000
+
+#run the app, this way prevents killme() from ending the container.
+#CMD ["flask", "run", "--host=0.0.0.0"]
+
+ENTRYPOINT ["python"]
+CMD ["usr/local/bin/app.py"]
