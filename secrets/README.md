@@ -13,11 +13,7 @@ eval $(minikube docker-env)
 ```
 From the `app_src` directory: 
 ```
-> python3 -m venv venv
-> . venv/bin/activate
-> pip install Flask
 > docker build -t app_secret .
-> deactivate
 ```
 `cd ..` then choose which secret type you want to use:
 
