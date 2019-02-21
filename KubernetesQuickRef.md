@@ -31,7 +31,7 @@ kubectl describe service
 Labels are key-value pairs that can be set in the .yaml files or manually. Not just pods can be labelled, so too can services, deployments, and most other resources.
 
 Set them with:
-```kubectl label pod <pod_name> app=v1```
+```kubectl label pod <pod_name> <label>=<value>```
 
 View them with:
 ```kubectl describe pod <pod_name>```
@@ -93,7 +93,7 @@ kubectl rollout status deployments/app-scale
 ## Debugging
 
 #### To get bash in a container 
-In a seperate terminal be running `kubectl proxy`. Then get the pod name either with `kubectl get pods -o wide`
+In a seperate terminal run `kubectl proxy`. Then get the pod name either with `kubectl get pods -o wide` or
 ```
 export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 kubectl exec -it $POD_NAME bin/sh
@@ -105,7 +105,7 @@ kubectl exec -it $POD_NAME bin/sh
 ## Local Images
 First get the minikube docker env vars loaded in your terminal:
 ```eval $(minikube docker-env)```
-Then you can build the image and verify its among minikube's images:
+Then you can build the image and verify it is among minikube's images:
 ```
 docker build -t <image_name:latest> .
 docker images

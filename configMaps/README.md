@@ -27,7 +27,7 @@ env-app-d-6cbc47f55c-hfjsx     1/1     Running   0          21m
 ```
 
 To ping it and try the env variable:
-```curl $(minikube ip):31110/listenv```
+```> curl $(minikube ip):31110/listenv```
 
 To delete it:
-```kubectl delete services,deployment,configmaps -l app=env-app```
+```> kubectl delete services,deployment,configmaps -l app=env-app```

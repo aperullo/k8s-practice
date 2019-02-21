@@ -9,16 +9,16 @@ You need to get the app-scale image into your minikube's docker image repo.
 
 Acquire environment vars for minikube: 
 ```
-eval $(minikube docker-env)
+> eval $(minikube docker-env)
 ```
 From the `app_src` directory: 
 ```
 > docker build -t app-scale .
 ```
-``cd ..` then start the deployment and service:
+`cd ..` then start the deployment and service:
 
 ```
-kubectl create -f app_scale.yaml
+> kubectl create -f app_scale.yaml
 ```
 
 Verify it worked by finding the pod/pods with:
@@ -47,12 +47,12 @@ In a seperate terminal, if you want to see the db pods dying and respawning as t
 
 To manually scale the deployment:
 ```
-kubectl scale deployment app-scale-d --replicas=7
+> kubectl scale deployment app-scale-d --replicas=7
 ```
 
 ## Learned things
 
-Deployment states are automatically managed. If the desired state and actual states differ, the deployment will start raising or bringing down pods as necessary. This is good in the event a pod fails, another replaces it. 
+Deployment states are automatically managed. If the desired state and actual states differ, the deployment will start raising or bringing down pods as necessary. This is useful in case a pod fails; another will replace it. 
 
-Deployments can be used to rollout updates whil keeping the service up; it will reduce the old image pods over time and replace them with new image ones. 
+Deployments can be used to roll out updates while keeping the service up; it will reduce the old image pods over time and replace them with new image ones. 
 

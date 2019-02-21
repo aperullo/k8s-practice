@@ -12,9 +12,9 @@ The Kubernetes quick reference is the main product of this repo.
 
 ## Instructions
 Go inside the folders of the mini projects for instructions on how to run them.
-In general it will be: 
+In general it will be some variant of: 
 ```
-minikube start
-kubectl create -f <app_name>.yaml
+> minikube start
+> kubectl create -f <app_name>.yaml
 ```
 

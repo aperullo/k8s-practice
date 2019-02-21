@@ -24,7 +24,7 @@ Build, deploy, and take it down with:
 > kubectl delete services,deployment,secrets,configmaps -l app=app-dict
 ```
 
-Send requests to define a specific word or get a random definition
+Send requests to define a specific word or get a random definition:
 ```
 > curl $(minikube ip):31100/define/word
 

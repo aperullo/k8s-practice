@@ -9,7 +9,7 @@ You need to get the app_secret image into your minikube's docker image repo.
 
 Acquire environment vars for minikube: 
 ```
-eval $(minikube docker-env)
+> eval $(minikube docker-env)
 ```
 From the `app_src` directory: 
 ```
@@ -19,12 +19,12 @@ From the `app_src` directory:
 
 For secrets from files:
 ```
-kubectl create -f app_secrets.yaml
+> kubectl create -f app_secrets.yaml
 ```
 
 For secrets through env variables:
 ```
-kubectl create -f app_secrets_env.yaml
+> kubectl create -f app_secrets_env.yaml
 ```
 
 Verify it worked by finding the container with:
@@ -64,3 +64,4 @@ Decode a secret:
 ```
 > kubectl get secrets -o yaml 
 > echo "BASE64SECRET" | base64 --decode
+```
