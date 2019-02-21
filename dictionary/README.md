@@ -7,14 +7,15 @@ It has an exposed service that talks to some query pods. The queryers know of an
 
 These DB pods have a high chance of dying before completing the request. The query pods will retry the request, the service should direct to one of the pods that are still responding. The query pod will try up to 5 times before declaring the request a failure. 
 
+secret_dir kept for demonstration purposes.
+
 Makefile:
 - TODO: should load the secrets from file and put them through kcl create secrets.
-- TODO: delete secret_dir
 
 ## How to use this
 
 #### Steps
-Build, deploy, and take it down with it with:
+Build, deploy, and take it down with:
 ```
 > make
 
