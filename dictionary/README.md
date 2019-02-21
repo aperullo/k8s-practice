@@ -44,3 +44,6 @@ The names are based on the name of the service, such as:
 APP_DICT_DB_S_SERVICE_HOST
 APP_DICT_DB_S_SERVICE_PORT
 ```
+## Credits
+
+Credit to https://github.com/adambom/dictionary and Project Gutenburg for the dictionary.json file.
