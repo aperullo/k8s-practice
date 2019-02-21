@@ -1,4 +1,4 @@
-# Secrets
+# Dictionary
 
 An app integrating a bunch of things I've learned into one project. A dictionary definition fetcher.
 User puts a word in query parameter and gets definition back.
