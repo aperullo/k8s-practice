@@ -19,11 +19,6 @@ From the directory with the dockerfile directory:
 > kubectl create -f env_app.yaml
 ```
 
-For secrets through env variables:
-```
-kubectl create -f app_secrets_env.yaml
-```
-
 Verify it worked by finding the container with:
 ```
 > kubectl get pods
