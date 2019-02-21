@@ -1,9 +1,9 @@
-# Secrets
+# Scaling
 
 Testing out kubernetes replica scaling when a container shuts down or is upgraded.
 
 ## How to use this
-You need to get the app_secret image into your minikube's docker image repo.
+You need to get the app-scale image into your minikube's docker image repo.
 
 ##### Steps
 
@@ -13,58 +13,46 @@ eval $(minikube docker-env)
 ```
 From the `app_src` directory: 
 ```
-> python3 -m venv venv
-> . venv/bin/activate
-> pip install Flask
-> docker build -t app_secret .
-> deactivate
+> docker build -t app-scale .
 ```
-`cd ..` then choose which secret type you want to use:
+``cd ..` then start the deployment and service:
 
-For secrets from files:
 ```
-kubectl create -f app_secrets.yaml
+kubectl create -f app_scale.yaml
 ```
 
-For secrets through env variables:
-```
-kubectl create -f app_secrets_env.yaml
-```
-
-Verify it worked by finding the container with:
+Verify it worked by finding the pod/pods with:
 ```
 > kubectl get pods
 NAME                              READY   STATUS    RESTARTS   AGE
-app-secret-d-6cbc47f55c-hfjsx     1/1     Running   0          21m
+app-scale-d-6cbc47f55c-hfjsx     1/1     Running   0          21m
 ```
-For secrets from files:
+
+You can also view the id's of the pods with:
 ```
-> kubectl exec -it app-secret-d-6cbc47f55c-hfjsx bin/sh
-/ # cd etc/secret_dir 
-/ # ls
-password  username
-/ # cat username password
-usernamevalue
-passwordvalue
+> curl "http://$(minikube ip):31110/id 
 ```
-For secrets through env variables:
+
+everytime a pod dies and respawns it will have a different id.
+
+To kill a pod do:
 ```
-> kcl exec -it app-secret-d-6cbc47f55c-hfjsx bin/sh
-/ # env
-USERNAME=usernamevalue
-PASSWORD=passwordvalue
+> curl "http://$(minikube ip):31110/killme 
+```
+
+In a seperate terminal, if you want to see the db pods dying and respawning as they are killed, do:
+```
+> watch -n 0.1 "kubectl get pods -o wide"
+```
+
+To manually scale the deployment:
+```
+kubectl scale deployment app-scale-d --replicas=7
 ```
 
 ## Learned things
 
-Create a secret by command. Automatically base64 encodes them:
-```
-kubectl create secret generic user-pass --from-file=./secrets_files/username.txt --from-file=./secrets_files/password.txt
-```
+Deployment states are automatically managed. If the desired state and actual states differ, the deployment will start raising or bringing down pods as necessary. This is good in the event a pod fails, another replaces it. 
 
-Create a secret from yaml. Have to manually base64 encode. See `secret_file.yaml`.
+Deployments can be used to rollout updates whil keeping the service up; it will reduce the old image pods over time and replace them with new image ones. 
 
-Decode a secret:
-```
-> kubectl get secrets -o yaml 
-> echo "BASE64SECRET" | base64 --decode
