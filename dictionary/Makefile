@@ -49,11 +49,6 @@ envsub:
 	export QUERYER_IMAGE_NAME=${QUERYER_IMAGE_NAME} && \
 	envsubst < $(APP_SRC)/app-dict.yaml > $(K8S_BUILD_DIR)/app-dict.yaml
 
-.PHONY: instructions
-instructions:
-	mkdir -p $(K8S_BUILD_DIR)
-	cp 
-
 all: clean build-db build-queryer envsub
 
 
