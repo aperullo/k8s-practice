@@ -7,7 +7,7 @@
 
 **Service**- A loose coupling of some exposed endpoint (such as a port, or subdomain) to a bunch of pods (through a deployment).
 
-## Baisc Commands
+## Basic Commands
 Start a local K8S cluster
 ```minikube start```
 
@@ -27,7 +27,7 @@ kubectl describe pods
 kubectl describe service
 ```
 
-##### Inspect by label
+#### Inspect by label
 Labels are key-value pairs that can be set in the .yaml files or manually. Not just pods can be labelled, so too can services, deployments, and most other resources.
 
 Set them with:
@@ -48,13 +48,13 @@ kubectl get services,deployments -l tier=frontend
 kubectl expose deployment/<deployment-name> --type=<ClusterIP|NodePort|LoadBalancer|ExternalName>
 kubectl expose deployment/kubernetes-bootcamp --type="NodePort" --port 8080
 ```
-**ClusterIP**- Makes the services only visible within the k8s cluster. See Dictionary's app-dict-db-s in the .yaml for an example.
+`ClusterIP`- Makes the services only visible within the k8s cluster. See Dictionary's app-dict-db-s in the .yaml for an example.
 
-**NodePort**- Makes the service visible from outside the cluster at the specified port
+`NodePort`- Makes the service visible from outside the cluster at the specified port
 
-**LoadBalancer**- Makes service visible, but using an external load balancer.
+`LoadBalancer`- Makes service visible, but using an external load balancer.
 
-**ExternalName**- Maps the service to an external name like `foo.bar.example.com`
+`ExternalName`- Maps the service to an external name like `foo.bar.example.com`
 
 #### Test exposed port
 get the nodeport from `kubectl get services -o wide` or use
@@ -120,5 +120,7 @@ docker images
 
 #### To decode secret
 ```kubectl get secrets -o yaml```
-//take value from data section
+
+Take base64 value from data section
+
 ```echo "<base64_secret>" | base64 --decode```
